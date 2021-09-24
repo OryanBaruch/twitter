@@ -1,0 +1,10 @@
+.btn-div{
+    display: flex;
+    justify-content: space-between;
+}
+
+#img{
+    border: 1px solid gray !important;
+    border-radius: 50%;
+    cursor: pointer;
+}

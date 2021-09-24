@@ -1,0 +1,7 @@
+#formPaper{
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: #f1f1f1e3;
+}

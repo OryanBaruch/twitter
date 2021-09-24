@@ -1,0 +1,7 @@
+.tweetListContainer{
+    margin: auto;
+    width: 30%;
+    position: absolute;
+    top: 3% !important;
+    left: 35%;
+}
