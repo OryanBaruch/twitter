@@ -7,30 +7,32 @@ import CommentForm from "../commentForm/CommentForm";
 import "./tweetItem.css";
 import UserCommands from "../userCommands/UserCommands";
 import { useHistory } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   fetchTweets,
   fetchTweetsByUserId,
   removeTweetById,
+  toggleLikeTweet,
 } from "../../Redux/Actions/tweetActions";
 
-const TweetItem = ({ tweet, index }) => {
+const TweetItem = ({ tweet }) => {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [boolean, setBoolean] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const dispatch = useDispatch();
+
   const history = useHistory();
   const dateFormat = tweet?.publishedAt.slice(0, 10);
   const localStorageData = JSON.parse(localStorage.getItem("user_info"));
-
-  const removeTweetReducer = useSelector(state => state.removeTweetReducer)
-  const {tweets}=removeTweetReducer;
+  const userId = localStorage.getItem("userId");
 
   const handleOpen = () => {
-    setOpen(true);
+    setBoolean(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setBoolean(false);
   };
 
   const handleOpenEdit = () => {
@@ -42,10 +44,10 @@ const TweetItem = ({ tweet, index }) => {
   };
 
   const redirectProfile = () => {
-    history.push("/profile");
+    localStorage.setItem("userId", tweet?.tweeterId?._id);
+    console.log(tweet?.tweeterId?._id);
+    history.push(`/profile-by-id/${tweet?.tweeterId?._id}`);
   };
-
-  const dispatch = useDispatch();
 
   const handleDelete = () => {
     dispatch(removeTweetById(tweet?._id));
@@ -53,16 +55,25 @@ const TweetItem = ({ tweet, index }) => {
     setOpen2(true);
   };
 
+  const handleLikeToggle = () => {
+    setOpen(true);
+    dispatch(
+      toggleLikeTweet({
+        _id: tweet?._id,
+        tweeterId: localStorageData.id,
+      })
+    );
+  };
+
   useEffect(() => {
     if (open) {
-      dispatch(fetchTweetsByUserId(localStorageData.id));
-      console.log('fetchTweetsByUser')
+      dispatch(fetchTweetsByUserId(userId));
     } else if (open2) {
       dispatch(fetchTweets());
-      console.log('fetchTweets')
     }
     setOpen(false);
-  }, [dispatch, open, open2, localStorageData.id]);
+    setOpen2(false);
+  }, [dispatch, open, open2, localStorageData.id, userId]);
 
   return (
     <>
@@ -70,7 +81,11 @@ const TweetItem = ({ tweet, index }) => {
         <div className="imageAndUserName">
           <img
             onClick={redirectProfile}
-            className="profile_photo"
+            className={
+              localStorageData.id === tweet?.tweeterId._id
+                ? "profile_photo"
+                : "not_user_profile_photo"
+            }
             src={tweet?.tweeterId?.profile_photo}
             alt="profile_photo"
           />
@@ -85,15 +100,28 @@ const TweetItem = ({ tweet, index }) => {
         <Card className="cardContainer">
           <h3> {tweet.content}</h3>
           <Divider />
-          <img className="img" src={tweet.image} alt="tweetImage" />
+          <img
+            onDoubleClick={handleLikeToggle}
+            className="img"
+            src={tweet.image}
+            alt="tweetImage"
+          />
         </Card>
-        <h6>tweetID: {tweet?._id}</h6>
+        {/* <h6>tweetID: {tweet?._id}</h6> */}
         <h6>userId: {tweet?.tweeterId?._id}</h6>
         <Divider />
         <div className="userCommands">
           <h3>
-            <FavoriteBorderIcon className="like" fontSize="medium" />{" "}
-            {tweet.numberOfLikes}
+            <FavoriteBorderIcon
+              onClick={handleLikeToggle}
+              className={
+                tweet?.likes?.includes(localStorageData.id)
+                  ? "likedTweet"
+                  : "like"
+              }
+              fontSize="medium"
+            />{" "}
+            {tweet?.likes?.length}
           </h3>
           <Chat className="comment" onClick={handleOpen} />
           {JSON.parse(localStorage.getItem("user_info")).id ===
@@ -109,7 +137,7 @@ const TweetItem = ({ tweet, index }) => {
             ""
           )}
         </div>
-        <CommentForm tweet={tweet} open={open} handleClose={handleClose} />
+        <CommentForm tweet={tweet} open={boolean} handleClose={handleClose} />
         <EditForm open={openEdit} tweet={tweet} handleClose={handleCloseEdit} />
       </Paper>
     </>

@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 25,
     backgroundColor: "#1DA1F2",
     width: "100%",
-    color:'white',
-    fontWeight:'bolder'
+    color: "white",
+    fontWeight: "bolder",
   },
   input: {
     border: "1px solid gray",
@@ -75,7 +75,11 @@ const Navbar = () => {
         <div className="iconAndLink">
           <Button>
             <Person className="icon" />
-            <a href="/Profile">Profile</a>
+            {JSON.parse(localStorage.getItem("user_info")) ? (
+              <a href="/profile">Profile</a>
+            ) : (
+              ""
+            )}
           </Button>
         </div>
         <div className="iconAndLink">

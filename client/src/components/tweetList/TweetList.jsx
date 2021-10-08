@@ -10,19 +10,17 @@ const TweetList = () => {
 
   return (
     <>
-        <div className="tweetListContainer">
-          <PostTweetForm />
-          {tweets ? (
-            tweets.map((tweet, index) => (
-              <TweetItem tweet={tweet} key={index} />
-            ))
-          ) : (
-            <img
-              src="https://i.pinimg.com/originals/2c/81/b7/2c81b7558f6576b48ae18317859be873.gif"
-              alt="loading..."
-            />
-          )}
-        </div>
+      <div className="tweetListContainer">
+        <PostTweetForm />
+        {tweets ? (
+          tweets.map((tweet, index) => <TweetItem tweet={tweet} key={index} />)
+        ) : (
+          <img
+            src="https://i.pinimg.com/originals/2c/81/b7/2c81b7558f6576b48ae18317859be873.gif"
+            alt="loading..."
+          />
+        )}
+      </div>
     </>
   );
 };

@@ -8,7 +8,7 @@ import EditForm from "../editForm/EditForm";
 import CommentForm from "../commentForm/CommentForm";
 import UserCommands from "../userCommands/UserCommands";
 
-const CommentByUser = ({ comment, index }) => {
+const CommentByUser = ({ comment }) => {
   const [counter, setCounter] = useState(1);
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -36,7 +36,6 @@ const CommentByUser = ({ comment, index }) => {
   };
 
   useEffect(() => {
-    console.log("the comment", comment);
     if (!handleDelete) {
       dispatch(fetchTweets());
     }
@@ -45,7 +44,6 @@ const CommentByUser = ({ comment, index }) => {
   return (
     <>
       {comment.postId !== null ? (
-      
         <Paper elevation={3}>
           <div className="imageAndUserName">
             <img

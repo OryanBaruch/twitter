@@ -7,6 +7,14 @@
     cursor: pointer;
 }
 
+.not_user_profile_photo{
+    width: 50px;
+    height:50px;
+    border-radius:50%;
+    border: 1px solid gainsboro;
+    margin: 10px 0 0 3px;
+}
+
 .imageAndUserName{
     display: flex;
     justify-content: space-evenly;
@@ -14,7 +22,7 @@
     margin-top: 2%;
 }
 
-.delete, .like, .edit{
+.delete, .like, .edit ,.comment{
 cursor: pointer;
 }
 
@@ -35,4 +43,14 @@ border-radius: 10%;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+}
+
+
+.likedTweet{
+    color:red;
+    cursor: pointer;
+}
+
+.like{
+    cursor: pointer;
 }

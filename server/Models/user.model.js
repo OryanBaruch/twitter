@@ -7,8 +7,15 @@ const userSchema = new Schema(
     password: { type: String, require: true },
     birthday: { type: String, require: true },
     profile_photo: { type: String },
+    liked: { type: Boolean, default: false },
     role: { type: Number, default: 0 },
     joinedAt: { type: Date, default: new Date() },
+    tweets: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "tweeter",
+      },
+    ],
   },
   { versionKey: false }
 );

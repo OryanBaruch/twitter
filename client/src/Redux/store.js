@@ -10,12 +10,14 @@ import {
   fetchTweetsReducer,
   fetchTweetsByIdReducer,
   editTweetsReducer,
-  removeTweetReducer
+  removeTweetReducer,
+  likeTweetReducer,
 } from "./Reducers/tweetReducer";
 import {
   commentReducer,
   fetchPostByCommentReducer,
 } from "./Reducers/commentReducer";
+import { profileReducer } from "./Reducers/profileReducer";
 import thunk from "redux-thunk";
 
 const combine_reducers = combineReducers({
@@ -28,7 +30,9 @@ const combine_reducers = combineReducers({
   commentReducer,
   fetchPostByCommentReducer,
   editTweetsReducer,
-  removeTweetReducer
+  removeTweetReducer,
+  likeTweetReducer,
+  profileReducer,
 });
 
 const middleware = [thunk];

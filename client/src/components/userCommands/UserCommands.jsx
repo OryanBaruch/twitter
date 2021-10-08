@@ -4,7 +4,7 @@ import Edit from "@material-ui/icons/Edit";
 import React from "react";
 
 
-const UserCommands = ({ tweet, handleOpenEdit, tweetsByUser, handleDelete}) => {
+const UserCommands = ({ handleOpenEdit,  handleDelete}) => {
 
   return (
     <>

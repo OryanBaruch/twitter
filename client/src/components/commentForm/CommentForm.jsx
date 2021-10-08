@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 const CommentForm = ({ tweet, open, handleClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
   const [comment, setComment] = useState("");
   const _id = tweet && tweet._id;
 
@@ -55,7 +54,7 @@ const CommentForm = ({ tweet, open, handleClose }) => {
               <TextField
                 type="text"
                 name="content"
-                placeholder="What's happening?..."
+                placeholder="Place comment?..."
                 onChange={(e) => setComment(e.target.value)}
                 value={comment}
               />

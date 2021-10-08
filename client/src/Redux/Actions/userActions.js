@@ -9,6 +9,7 @@ import {
   USER_LOUGOUT_SUCCESS,
   FETCH_USER_DATA_REQUEST,
   FETCH_USER_DATA_SUCCESS,
+  REGISTER_FAILURE,
 } from "./actionTypes";
 import jwt_decode from "jwt-decode";
 
@@ -33,7 +34,6 @@ export const loginAction =
           type: LOGIN_FAILURE,
           payload: data,
         });
-        console.log(data)
       } else {
         console.log(data.error)
         localStorage.setItem(
@@ -47,7 +47,6 @@ export const loginAction =
         });
       }
     } catch (error) {
-      console.log(`the error`, error);
       dispatch({
         type: LOGIN_FAILURE,
         payload: error.message,
@@ -83,10 +82,10 @@ export const registerAction =
         payload: data.registerNewUser,
       });
     } catch (error) {
-      // dispatch({
-      //   type: REGISTER_FAILURE,
-      //   payload: error.error,
-      // });
+      dispatch({
+        type: REGISTER_FAILURE,
+        payload: error,
+      });
       console.log(error);
     }
   };
@@ -98,7 +97,6 @@ export const userLogoutAction = () => async (dispatch) => {
     });
     localStorage.clear();
   } catch (error) {
-    console.log(error);
     dispatch({
       type: USER_LOUGOUT_FAILURE,
       payload: error.message,
@@ -114,14 +112,11 @@ export const fetchLoggedInUserData = (_id) => async (dispatch) => {
     const userId = JSON.parse(localStorage.getItem("user_info")).id;
     const res = await fetch(ENDPOINT + `/auth/user-data/${userId}`);
     const data = await res.json();
-    // console.log(userId);
-    // console.log(data.userData[0]);
     dispatch({
       type: FETCH_USER_DATA_SUCCESS,
       payload: data.userData[0],
     });
   } catch (error) {
-    console.log({ error });
     dispatch({
       type: FETCH_USER_DATA_SUCCESS,
       payload: error,

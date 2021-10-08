@@ -2,7 +2,6 @@ import { Button, Paper } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchTweets,
   fetchTweetsByUserId,
 } from "../../Redux/Actions/tweetActions";
 import { fetchLoggedInUserData } from "../../Redux/Actions/userActions";
@@ -36,13 +35,9 @@ const Profile = () => {
   const fetchUserDataReducer = useSelector(
     (state) => state.fetchUserDataReducer
   );
-
   const { userInfo } = fetchUserDataReducer;
   const userInfoData = userInfo && userInfo;
   let dateOfJoin = userInfoData?.joinedAt?.split("").slice(0, 10).join("");
-
-  const removeTweetReducer = useSelector(state => state.removeTweetReducer)
-  const {fetchTweetsByUser}=removeTweetReducer;
 
   const fetchTweetsByIdReducer = useSelector(
     (state) => state.fetchTweetsByIdReducer
@@ -52,7 +47,7 @@ const Profile = () => {
   const fetchPostByCommentReducer = useSelector(
     (state) => state.fetchPostByCommentReducer
   );
-  let { tweetsByUser, isCommentRendered } = fetchPostByCommentReducer;
+  let { commentByUser, isCommentRendered } = fetchPostByCommentReducer;
 
   const localStorageData = JSON.parse(localStorage.getItem("user_info"));
   const dispatch = useDispatch();
@@ -83,13 +78,13 @@ const Profile = () => {
   const redirectProfile = () => {
     history.push("/homepage");
   };
+  
 
   useEffect(() => {
     dispatch(fetchLoggedInUserData(localStorageData.id));
     dispatch(fetchTweetsByUserId(localStorageData.id));
     dispatch(fetchCommentsById(localStorageData.id));
-    console.log(fetchTweetsByUser&&fetchTweetsByUser)
-  }, [dispatch, localStorageData.id, fetchTweetsByUser]);
+  }, [dispatch, localStorageData.id]);
 
   return (
     <>
@@ -141,9 +136,9 @@ const Profile = () => {
         </div>
         <div className="commentsByuser">
           {commentsRendered ? (
-            tweetsByUser ? (
-              tweetsByUser.map((comment, index) => (
-                <CommentByUser comment={comment} key={index} />
+            commentByUser ? (
+              commentByUser.map((comment, index) => (
+                <CommentByUser  comment={comment} key={index} />
               ))
             ) : (
               <h1>{msg}</h1>

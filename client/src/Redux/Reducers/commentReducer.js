@@ -48,7 +48,7 @@ export const fetchPostByCommentReducer=(state=commentsInitalState, action)=>{
     case FETCH_COMMENT_BY_USER_SUCCESS:
       return {...state,
         loading: false,
-        tweetsByUser: payload.fetchCommentsById,
+        commentByUser: payload.fetchCommentsById,
         isCommentRendered:false,
         msg:payload.msg,
         tweeterInfo:payload.fetchLatestTweet

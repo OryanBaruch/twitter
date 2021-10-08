@@ -14,6 +14,11 @@ import {
   FETCH_TWEETS_BY_USERID_REQUEST,
   FETCH_TWEETS_BY_USERID_SUCCESS,
   FETCH_TWEETS_BY_USERID_FAILURE,
+  TOGGLE_LIKE_TWEET_SUCCESS,
+  LIKE_TWEET_FAILURE,
+  // FETCH_TWEETS_BY_ID_REQUEST,
+  // FETCH_TWEETS_BY_ID_SUCCESS,
+  // FETCH_TWEETS_BY_ID_FAILURE,
 } from "../Actions/actionTypes";
 
 const InitalState = {
@@ -21,6 +26,7 @@ const InitalState = {
   error: null,
   msg: "",
   tweets: [],
+  likes: [],
   isRendered: false,
 };
 
@@ -65,8 +71,9 @@ export const fetchTweetsReducer = (state = [], action) => {
         loading: false,
         error: null,
         tweets: payload,
-        tweets2: payload,
-        isRendered:false
+        likes: payload.likes,
+        liked: payload.liked,
+        isRendered: false,
       };
 
     case FETCH_TWEETS_FAILURE:
@@ -75,7 +82,6 @@ export const fetchTweetsReducer = (state = [], action) => {
         tweets: [],
         error: payload.message,
       };
-
     default:
       return state;
   }
@@ -156,6 +162,29 @@ export const fetchTweetsByIdReducer = (state = InitalState, action) => {
         loading: false,
         error: payload.message,
         tweets: [],
+      };
+
+    default:
+      return state;
+  }
+};
+
+
+export const likeTweetReducer = (state = {}, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case TOGGLE_LIKE_TWEET_SUCCESS:
+      return {
+        ...state,
+        tweetData:payload,
+        likes: payload.toggleLikeTweet.likes,
+        msg: payload.msg,
+      };
+    case LIKE_TWEET_FAILURE:
+      return {
+        ...state,
+        likes: [],
+        msg: payload.error,
       };
 
     default:

@@ -26,13 +26,11 @@ export const commentAction = (comment, postId) => async (dispatch) => {
       }),
     });
     const data = await res.json();
-    // console.log(data);
     dispatch({
       type: POST_COMMENT_SUCCESS,
       payload: data.fetchComments,
     });
   } catch (error) {
-    console.log({ error });
     dispatch({
       POST_COMMENT_FAILURE,
       payload: error,
@@ -45,12 +43,10 @@ export const fetchCommentsById = (_id) => async (dispatch) => {
     dispatch({
       type: FETCH_COMMENT_BY_USER_REQUEST,
     });
-    // const tweeterId = JSON.parse(localStorage.getItem("user_info")).id;
     const res = await fetch(
       ENDPOINT + `/comment/fetch-post-by-user-comments/${_id}`
     );
     const data = await res.json();
-    // console.log(data.fetchCommentsById);
     dispatch({
       type: FETCH_COMMENT_BY_USER_SUCCESS,
       payload: data,

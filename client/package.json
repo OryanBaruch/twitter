@@ -17,6 +17,7 @@
     "date-fns": "^2.19.0",
     "jwt-decode": "^3.1.2",
     "material-ui-icons": "^1.0.0-beta.36",
+    "material-ui-search-bar": "^1.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-modal": "^3.14.3",
