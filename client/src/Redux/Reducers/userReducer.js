@@ -73,6 +73,7 @@ export const fetchUserDataReducer = (state = initalStateUserInfo, action) => {
         loading: false,
         msg: payload.msg,
         userInfo: payload,
+        tweets:payload.tweets
       };
     case FETCH_USER_DATA_FAILURE:
       return {

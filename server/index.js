@@ -17,5 +17,6 @@ app.use("/auth", require("./Routes/auth.routes"));
 app.use("/tweet", require("./Routes/tweets.routes"));
 app.use("/comment", require("./Routes/comments.routes"));
 app.use("/profile", require("./Routes/profile.routes"));
+app.use("/follow", require("./Routes/follow.routes"));
 
 app.listen(port, console.log(`Go on ${port}, Enjoy.`));

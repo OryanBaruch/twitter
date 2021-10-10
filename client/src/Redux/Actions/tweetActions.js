@@ -40,6 +40,8 @@ export const postTweet = (content, image) => async (dispatch) => {
       }),
     });
     const data = await res.json();
+    console.log(data);
+    console.log(data.msg);
     dispatch({
       type: POST_TWEET_SUCCESS,
       payload: data.postNewTweet,
@@ -88,7 +90,7 @@ export const removeTweetById = (_id) => async (dispatch) => {
       type: REMOVE_TWEET_SUCCESS,
       payload: data,
     });
-    dispatch(fetchTweets())
+    dispatch(fetchTweets());
   } catch (error) {
     dispatch({
       type: REMOVE_TWEET_FAILURE,
@@ -134,7 +136,7 @@ export const fetchTweetsByUserId = (_id) => async (dispatch) => {
     });
     const res = await fetch(ENDPOINT + `/tweet/tweets-by-user-id/${_id}`);
     const data = await res.json();
-    console.log(data)
+    console.log(data);
     dispatch({
       type: FETCH_TWEETS_BY_USERID_SUCCESS,
       payload: data,
@@ -168,7 +170,7 @@ export const fetchTweetsById = (_id) => async (dispatch) => {
 
 export const toggleLikeTweet =
   ({ _id, tweeterId }) =>
-  async (dispatch, history) => {
+  async (dispatch) => {
     try {
       const res = await fetch(ENDPOINT + `/tweet/toggleLike/${_id}`, {
         method: "PUT",
@@ -185,7 +187,7 @@ export const toggleLikeTweet =
         type: TOGGLE_LIKE_TWEET_SUCCESS,
         payload: data,
       });
-      dispatch(fetchTweets())
+      dispatch(fetchTweets());
     } catch (error) {
       console.log("error like", error);
       dispatch({

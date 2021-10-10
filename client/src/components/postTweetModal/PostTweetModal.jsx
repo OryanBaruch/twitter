@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PostTweetModal = ({ open, handleClose }) => {
   const [formData, setFormData] = useState({});
-  const [counter, setCounter] = useState(1);
+  const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
@@ -69,7 +69,7 @@ const PostTweetModal = ({ open, handleClose }) => {
   };
 
   useEffect(() => {
-    dispatch(fetchTweets());
+      dispatch(fetchTweets());
   }, [counter, dispatch]);
 
   return (

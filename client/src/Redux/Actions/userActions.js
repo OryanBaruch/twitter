@@ -109,9 +109,10 @@ export const fetchLoggedInUserData = (_id) => async (dispatch) => {
     dispatch({
       type: FETCH_USER_DATA_REQUEST,
     });
-    const userId = JSON.parse(localStorage.getItem("user_info")).id;
-    const res = await fetch(ENDPOINT + `/auth/user-data/${userId}`);
+    // const userId = JSON.parse(localStorage.getItem("user_info")).id;
+    const res = await fetch(ENDPOINT + `/auth/user-data/${_id}`);
     const data = await res.json();
+    console.log(data)
     dispatch({
       type: FETCH_USER_DATA_SUCCESS,
       payload: data.userData[0],
@@ -123,3 +124,5 @@ export const fetchLoggedInUserData = (_id) => async (dispatch) => {
     });
   }
 };
+
+

@@ -17,7 +17,7 @@ import {
   commentReducer,
   fetchPostByCommentReducer,
 } from "./Reducers/commentReducer";
-import { profileReducer } from "./Reducers/profileReducer";
+import { profileReducer, followReducer } from "./Reducers/profileReducer";
 import thunk from "redux-thunk";
 
 const combine_reducers = combineReducers({
@@ -33,6 +33,7 @@ const combine_reducers = combineReducers({
   removeTweetReducer,
   likeTweetReducer,
   profileReducer,
+  followReducer
 });
 
 const middleware = [thunk];

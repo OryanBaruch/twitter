@@ -7,7 +7,6 @@ const TweetSchema = new Schema(
     tweeterId: { type: Schema.Types.ObjectId, ref: "user" },
     liked: { type: Boolean, default: false },
     likes: [],
-    // likes: [{ type: Schema.Types.ObjectId, ref: "user" }],
     publishedAt: { type: Date, default: new Date() },
     isActive: { type: Boolean, default: true },
   },

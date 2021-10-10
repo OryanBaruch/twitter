@@ -49,6 +49,8 @@ const Profile = () => {
   );
   let { commentByUser, isCommentRendered } = fetchPostByCommentReducer;
 
+  const profileReducer = useSelector(state => state.profileReducer)
+
   const localStorageData = JSON.parse(localStorage.getItem("user_info"));
   const dispatch = useDispatch();
   const history = useHistory();
@@ -94,6 +96,8 @@ const Profile = () => {
           <ArrowBack className="arrowback" onClick={redirectHome} />
         </div>
         {userInfoData?.username}
+        <br />
+        Followers : {userInfoData?.followers?.length}
         <div>
           {!numberOfTweets ? (
             <h3>You havnt tweeted yet.</h3>

@@ -1,7 +1,7 @@
 import { Button, Paper } from "@material-ui/core";
 import { fetchProfileById } from "../../Redux/Actions/profileAction";
 import { useParams, useHistory } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTweetsByUserId } from "../../Redux/Actions/tweetActions";
 import DateRange from "@material-ui/icons/DateRange";
@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import "./profile.css";
 import SnackbarAlert from "../snackbar/SnackbarAlert";
 import TweetItem from "../tweetItem/TweetItem";
+import { toggleFollow } from "../../Redux/Actions/followActions";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,15 +26,16 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileById = () => {
   const classes = useStyles();
+  const [follow, setFollow] = useState(false);
   const [tweetsRendered, setTweetsRendered] = useState(false);
   const localStorageData = JSON.parse(localStorage.getItem("user_info"));
   const dispatch = useDispatch();
   const history = useHistory();
-  
+
   const profileReducer = useSelector((state) => state.profileReducer);
   const { profile } = profileReducer;
   const { userId } = useParams;
-  
+
   const dateOfJoin = profile?.joinedAt?.split("").slice(0, 10).join("");
 
   const fetchTweetsByIdReducer = useSelector(
@@ -54,6 +56,15 @@ const ProfileById = () => {
     history.push("/homepage");
   };
 
+  const handleToggleFollow = (_id) => {
+    dispatch(
+      toggleFollow({
+        _id: localStorage.getItem("userId"),
+        followerId: localStorageData.id,
+      })
+    );
+  };
+
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     dispatch(fetchTweetsByUserId(userId));
@@ -67,6 +78,23 @@ const ProfileById = () => {
         <div>
           <ArrowBack className="arrowback" onClick={redirectHome} />
         </div>
+        <h3>
+          followers:{" "}
+          {!profile?.followers.length
+            ? "Be the first to follow"
+            : profile?.followers.length}
+        </h3>
+        <div>
+          {localStorageData.id === profile?._id ? (
+            ""
+          ) : (
+            <Button onClick={handleToggleFollow}>
+              {profile?.followers?.includes(localStorage.getItem("userId"))
+                ? "unFollow"
+                : "Follow"}
+            </Button>
+          )}
+        </div>
         <div>
           {!numberOfTweets ? (
             <h3>You havnt tweeted yet.</h3>
@@ -74,12 +102,8 @@ const ProfileById = () => {
             <h3> Tweeted {numberOfTweets} times.</h3>
           )}
         </div>
-        <img
-          className="image"
-          src={profile?.profile_photo}
-          alt="profile"
-        />
-        <h3>{profile?.username}</h3>
+        <img className="image" src={profile?.profile_photo} alt="profile" />
+        <h3>{profile?.username }</h3>
         <h3>Email:{profile?.email}</h3>
         <div>
           <DateRange />

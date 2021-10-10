@@ -67,13 +67,13 @@ const TweetItem = ({ tweet }) => {
 
   useEffect(() => {
     if (open) {
-      dispatch(fetchTweetsByUserId(userId));
+      dispatch(fetchTweetsByUserId(localStorageData.id));
     } else if (open2) {
       dispatch(fetchTweets());
     }
     setOpen(false);
     setOpen2(false);
-  }, [dispatch, open, open2, localStorageData.id, userId]);
+  }, [dispatch, open, open2, localStorageData.id]);
 
   return (
     <>

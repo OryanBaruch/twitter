@@ -35,7 +35,6 @@ const SearchBarComp = () => {
     <>
       <div className="searchBarContainer">
         <SearchBar value={search} onChange={(e) => handleChange(e)} />
-
         <Button
           onClick={() => searchForUser(search)}
           className="submitSearch"

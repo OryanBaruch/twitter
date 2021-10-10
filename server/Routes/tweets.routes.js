@@ -77,15 +77,10 @@ router.post("/post-tweet", async (req, res) => {
       content,
       image,
     });
-    const pushToUserTweets = await user_model.findOneAndUpdate(
-      { tweeterId },
-      {
-        $push: {
-          tweets: postNewTweet,
-        },
-      },
-      { new: true }
-    );
+
+    const user=await user_model.findById(tweeterId)
+    user.tweets=user.tweets.concat(postNewTweet._id)
+    await user.save()
     const fetchLatestTweet = await tweet_model
       .find({ _id: postNewTweet._id })
       .populate({
@@ -95,8 +90,7 @@ router.post("/post-tweet", async (req, res) => {
       err: false,
       msg: "Tweeted successfully.",
       postNewTweet,
-      fetchLatestTweet,
-      pushToUserTweets
+      fetchLatestTweet
     });
   } catch (error) {
     console.log({
@@ -219,7 +213,7 @@ router.put("/toggleLike/:_id", async (req, res) => {
       );
       return res.status(201).json({
         err: false,
-        msg: "Liked ",
+        msg: "UnLiked ",
         toggleLikeTweet,
       });
     } else {

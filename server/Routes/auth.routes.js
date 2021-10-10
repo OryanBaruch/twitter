@@ -71,7 +71,7 @@ router.post("/login", async (req, res) => {
 router.get("/user-data/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
-    const userData = await user_model.find({ _id:_id });
+    const userData = await user_model.find({ _id:_id }).populate('tweets');
     return res.status(201).json({
       err: false,
       msg: "Fetched data for user",
@@ -81,37 +81,5 @@ router.get("/user-data/:_id", async (req, res) => {
     console.log(error);
   }
 });
-// router.post("/login", async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-//     const user = await user_model.findOne({ email });
-//     if (!user) return res.status(401).json({ error: true, msg: invalidMsg });
-//     const match = await bcrypt.compare(password, user.password);
-//     if (!match || !user) return res.status(401).json({ error: true, msg: invalidMsg });
-
-//     const access_token = jwt.sign(
-//       {
-//         id: user._id,
-//         email: user.email,
-//         username: user.username,
-//         profile_photo: user.profile_photo,
-//         age: user.age,
-//         birthday: user.birthday,
-//       },
-//       `${process.env.ACCESS_TOKNE_SECRET}`
-//     );
-
-//     return res.json({
-//       error: false,
-//       msg: `Welcome ${user.username}`,
-//       access_token,
-//     });
-//   } catch (error) {
-//     return res.status(404).json({
-//       err: true,
-//       msg: invalidMsg,
-//     });
-//   }
-// });
 
 module.exports = router;
