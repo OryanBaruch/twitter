@@ -5,7 +5,11 @@ const { user_model } = require("../Models/user.model");
 //all tweets
 router.get(`/tweets`, async (req, res) => {
   try {
-    const fetchAllTweets = await tweet_model.find().populate("tweeterId");
+
+    const fetchAllTweetsByLikes = await tweet_model.find().populate("tweeterId");
+    const fetchAllTweets=fetchAllTweetsByLikes.sort((a,b)=>
+    a.likes.length < b.likes.length ? 1 : -1
+    )
     return res.json({
       err: false,
       msg: "Fetched Tweets",
@@ -19,6 +23,23 @@ router.get(`/tweets`, async (req, res) => {
     });
   }
 });
+// router.get(`/tweets`, async (req, res) => {
+//   try {
+//     // const fetchAllTweets = await tweet_model.find().populate("tweeterId");
+//     const fetchAllTweets = await tweet_model.find().populate("tweeterId");
+//     return res.json({
+//       err: false,
+//       msg: "Fetched Tweets",
+//       fetchAllTweets,
+//     });
+//   } catch (error) {
+//     res.json({
+//       err: true,
+//       msg: "Failed to fetch",
+//       error,
+//     });
+//   }
+// });
 
 //tweet by the id of the tweet
 router.get("/single-tweet/:_id", async (req, res) => {
@@ -100,33 +121,6 @@ router.post("/post-tweet", async (req, res) => {
     });
   }
 });
-// router.post("/post-tweet", async (req, res) => {
-//   try {
-//     const { tweeterId, content, image } = req.body;
-//     const postNewTweet = await tweet_model.create({
-//       tweeterId,
-//       content,
-//       image,
-//     });
-//     const fetchLatestTweet = await tweet_model
-//       .find({ _id: postNewTweet._id })
-//       .populate({
-//         path: "tweeterId",
-//       });
-//     return res.json({
-//       err: false,
-//       msg: "Tweeted successfully.",
-//       postNewTweet,
-//       fetchLatestTweet,
-//     });
-//   } catch (error) {
-//     console.log({
-//       err: true,
-//       msg: "Failed to post new tweet",
-//       error,
-//     });
-//   }
-// });
 
 //Delete tweet by id of the tweet
 //not before update the isActive propery to false.

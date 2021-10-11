@@ -1,0 +1,40 @@
+.mostFollowedContainer, .mostFollowersHeader{
+   display: flex;
+   flex-direction: row;
+   width: 15%;
+   margin: 0  0  0  67.5% ;
+   position: absolute;
+   top: 8em;
+}
+
+.mostFollowersHeader{
+    margin-top: -1%;
+}
+
+.mostFollowersHeader:hover{
+    background-color: rgba(209, 242, 255, 0.884);
+    transition: 0.8s;
+}
+
+
+.followedUsers{
+    width:100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.followedUsers:hover{
+    background-color: rgba(86, 173, 255, 0.264);
+    transition: 0.5s;
+}
+
+.mostFollowedImage{
+    display: flex !important;
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    right: 0;
+}

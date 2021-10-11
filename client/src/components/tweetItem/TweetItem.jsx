@@ -14,7 +14,13 @@ import {
   removeTweetById,
   toggleLikeTweet,
 } from "../../Redux/Actions/tweetActions";
-import SearchBarComp from "../searchBar/SearchBarComp";
+import { styled } from "@mui/material/styles";
+
+const Div = styled("div")(({ theme }) => ({
+  ...theme.typography.button,
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(1),
+}));
 
 const TweetItem = ({ tweet }) => {
   const [open, setOpen] = useState(false);
@@ -45,8 +51,8 @@ const TweetItem = ({ tweet }) => {
 
   const redirectProfile = () => {
     localStorage.setItem("userId", tweet?.tweeterId?._id);
-    localStorage.removeItem('search')
-    history.push(`/profile-by-id/${localStorage.getItem('userId')}`);
+    localStorage.removeItem("search");
+    history.push(`/profile-by-id/${localStorage.getItem("userId")}`);
   };
 
   const handleDelete = () => {
@@ -57,7 +63,7 @@ const TweetItem = ({ tweet }) => {
 
   const handleLikeToggle = () => {
     setOpen(true);
-    console.log(tweet.tweeterId._id)
+    console.log(tweet.tweeterId._id);
     dispatch(
       toggleLikeTweet({
         _id: tweet?._id,
@@ -90,16 +96,16 @@ const TweetItem = ({ tweet }) => {
             src={tweet?.tweeterId?.profile_photo}
             alt="profile_photo"
           />
-          <h4 style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
+          <Div style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
             {tweet?.tweeterId?.username}
-          </h4>
-          <h4 style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
+          </Div>
+          <Div style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
             {dateFormat}
-          </h4>
+          </Div>
         </div>
         <Divider />
         <Card className="cardContainer">
-          <h3> {tweet.content}</h3>
+          <Div> {tweet.content}</Div>
           <img
             onDoubleClick={handleLikeToggle}
             className="img"

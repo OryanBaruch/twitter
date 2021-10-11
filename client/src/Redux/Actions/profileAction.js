@@ -10,14 +10,21 @@ export const fetchProfileById = (_id) => async (dispatch) => {
     dispatch({
       type: FETCH_PROFILE_REQUEST,
     });
-    const res = await fetch(ENDPOINT + `/profile/profile/${_id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const fetchFromSearch = localStorage.getItem("search");
+    const fetchFromUserId = localStorage.getItem("userId");
+    const res = await fetch(
+      ENDPOINT +
+        `/profile/profile/${
+          fetchFromSearch ? fetchFromSearch : fetchFromUserId
+        }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await res.json();
-    console.log(data);
     dispatch({
       type: FETCH_PROFILE_SUCCESS,
       payload: data,

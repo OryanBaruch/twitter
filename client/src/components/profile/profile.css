@@ -3,17 +3,9 @@
 }
 
 .image{
-    width: 22% !important;
+    width: 5em !important;
     border: 0.3vw solid rgb(255, 255, 255);
     border-radius: 50% !important;
-    display: flex;
-    justify-content: center;
-    margin-top: 0;
-}
-
-.profileGrayPaper{
-    background-color: #666666;
-    color: gray;
 }
 
 #paperCont{
@@ -22,10 +14,21 @@
     position: absolute;
     top: 3% !important;
     left: 35%;
-    background: rgb(255,255,255);
-    background: linear-gradient(0deg, rgba(255,255,255,1) 51%, rgba(214,214,214,1) 51%);
+    background-color: rgb(245 248 250) ;
+}
+
+#paperCont:hover{
+    background-color: rgba(86, 173, 255, 0.264);
+    transition: 0.5s;
+    
 }
 
 .arrowback{
     cursor: pointer;
+}
+
+.userDetails{
+    display: flex;
+    width: 100%;
+    justify-content: space-between
 }

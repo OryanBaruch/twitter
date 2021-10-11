@@ -26,28 +26,12 @@ export const profileReducer = (state = {}, action) => {
         error:true,
         msg:'Error with fetch profile data'
       };
-     case FOLLOW_USER_REQUEST:
-       return {
-         loading:true
-       }
-      case FOLLOW_USER_SUCCESS:
-        return {
-          ...state,
-          msg:payload.msg,
-          followers:payload.toggleFollow.followers
-        } 
-      case FOLLOW_USER_FAILURE:
-        return {
-          error:payload.error,
-          msg:payload.msg
-        } 
-        
     default:
       return state;
   }
 };
 
-export const followReducer = (state = {}, action) => {
+export const followReducer = (state = [], action) => {
   const { type, payload } = action;
   switch (type) {
      case FOLLOW_USER_REQUEST:
@@ -59,7 +43,7 @@ export const followReducer = (state = {}, action) => {
           ...state,
           msg:payload.msg,
           profile:payload.toggleFollow,
-          followers:payload.toggleFollow.followers
+          // followers:payload.toggleFollow.followers
         } 
       case FOLLOW_USER_FAILURE:
         return {

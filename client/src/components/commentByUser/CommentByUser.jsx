@@ -7,6 +7,13 @@ import { fetchTweets, removeTweetById } from "../../Redux/Actions/tweetActions";
 import EditForm from "../editForm/EditForm";
 import CommentForm from "../commentForm/CommentForm";
 import UserCommands from "../userCommands/UserCommands";
+import { styled } from "@mui/material/styles";
+
+const Div = styled("div")(({ theme }) => ({
+  ...theme.typography.button,
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(1),
+}));
 
 const CommentByUser = ({ comment }) => {
   const [counter, setCounter] = useState(1);
@@ -50,54 +57,30 @@ const CommentByUser = ({ comment }) => {
               className="profile_photo"
               src={comment?.postId?.tweeterId?.profile_photo}
               alt="profile_photo"
-              />
-            <h4 style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
+            />
+            <Div style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
               {comment?.postId?.tweeterId?.username}
-            </h4>
-            <h4 style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
+            </Div>
+            <Div style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
               {comment?.postId?.publishedAt?.slice(0, 10)}
-            </h4>
+            </Div>
           </div>
           <Divider />
+          <Div>{comment?.dateOfComment.slice(0, 10)}</Div>
+          <Div>Comment: {comment?.comment}</Div>
+
           <Card className="cardContainer">
-            <h3> {comment?.postId?.content}</h3>
+            <Div> {comment?.postId?.content}</Div>
             <img
               className="img"
               src={comment?.postId?.image}
               alt="tweetImage"
-              />
-          </Card>
-          <h3>myComment: {comment?.comment}</h3>
-          <h3>{comment?.dateOfComment.slice(0, 10)}</h3>
-          <Divider />
-          <div className="userCommands">
-            <h3>
-              <FavoriteBorderIcon className="like" fontSize="medium" />{" "}
-              {comment?.postId?.numberOfLikes}
-            </h3>
-            {comment?.postId?.tweeterId?._id ===
-            JSON.parse(localStorage.getItem("user_info")).id ? (
-              //fix comment on comment
-              <>
-                <UserCommands
-                  handleDelete={handleDelete}
-                  tweet={comment}
-                  handleOpenEdit={handleOpenEdit}
-                  />
-              </>
-            ) : (
-              ""
-              )}
-            <Chat className="comment" onClick={handleOpen} />
-          </div>
-          <CommentForm tweet={comment} open={open} handleClose={handleClose} />
-          <EditForm
-            open={openEdit}
-            tweet={comment}
-            handleClose={handleCloseEdit}
             />
+          </Card>
+          <Divider />
         </Paper>
-            ) : ( ""
+      ) : (
+        ""
       )}
     </>
   );

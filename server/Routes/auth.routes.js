@@ -84,12 +84,15 @@ router.get("/user-data/:_id", async (req, res) => {
 
 router.get("/all-users", async (req, res) => {
   try {
-    const userData = await user_model.find();
-      return res.status(201).json({
-        err: false,
-        msg: "Fetched data for user",
-        userData
-      });
+    let userDataInfo = await user_model.find();
+    let userData = userDataInfo.sort((a, b) =>
+      a.followers.length < b.followers.length ? 1 : -1
+    );
+    return res.status(201).json({
+      err: false,
+      msg: "Fetched data for user",
+      userData,
+    });
   } catch (error) {
     return res.json({
       error: true,

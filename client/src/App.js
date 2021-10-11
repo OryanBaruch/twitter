@@ -8,6 +8,7 @@ import "./App.css";
 import Profile from "./components/profile/Profile";
 import SearchBarComp from "./components/searchBar/SearchBarComp";
 import ProfileById from "./components/profile/ProfileById";
+import MostFollowed from "./components/mostFollowed/MostFollowed";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <>
             <Navbar className="navBar" />
             <SearchBarComp className="searchBar" />
+            <MostFollowed />
             <Route path="/homepage" exact component={TweetList} />
             <Route path="/profile" exact component={Profile} />
             <Route path="/profile-by-id/:_id" exact component={ProfileById} />

@@ -5,11 +5,6 @@ router.get("/profile/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
     const profile = await user_model.find({ _id:_id });
-    // !profile.length
-    //   ? res.json({
-    //       msg: "Profile does not exist",
-    //     })
-    //   :
       res.status(201).json({
         error: false,
         msg: `Profile of ${profile[0].username}`,

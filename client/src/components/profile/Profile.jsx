@@ -1,9 +1,7 @@
 import { Button, Paper } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchTweetsByUserId,
-} from "../../Redux/Actions/tweetActions";
+import { fetchTweetsByUserId } from "../../Redux/Actions/tweetActions";
 import { fetchLoggedInUserData } from "../../Redux/Actions/userActions";
 import DateRange from "@material-ui/icons/DateRange";
 import ArrowBack from "@material-ui/icons/ArrowBack";
@@ -14,6 +12,11 @@ import { useHistory } from "react-router";
 import { fetchCommentsById } from "../../Redux/Actions/commentActions";
 import "./profile.css";
 import SnackbarAlert from "../snackbar/SnackbarAlert";
+import { styled } from "@mui/material/styles";
+
+const Div = styled("div")(({ theme }) => ({
+  ...theme.typography.button,
+}));
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -42,7 +45,8 @@ const Profile = () => {
   const fetchTweetsByIdReducer = useSelector(
     (state) => state.fetchTweetsByIdReducer
   );
-  let { numberOfTweets, msg, error, isRendered , tweets } = fetchTweetsByIdReducer;
+  let { numberOfTweets, msg, error, isRendered, tweets } =
+    fetchTweetsByIdReducer;
 
   const fetchPostByCommentReducer = useSelector(
     (state) => state.fetchPostByCommentReducer
@@ -57,11 +61,11 @@ const Profile = () => {
     if (isRendered) {
       setTweetsRendered(tweetsRendered);
     } else {
-      setCommentsRendered(false)
+      setCommentsRendered(false);
       setTweetsRendered(!tweetsRendered);
     }
   };
-  
+
   const toggleRenderComments = () => {
     if (isCommentRendered) {
       setCommentsRendered(commentsRendered);
@@ -78,7 +82,6 @@ const Profile = () => {
   const redirectProfile = () => {
     history.push("/homepage");
   };
-  
 
   useEffect(() => {
     dispatch(fetchLoggedInUserData(localStorageData.id));
@@ -90,27 +93,27 @@ const Profile = () => {
     <>
       {tweetsRendered ? <SnackbarAlert error={error} msg={msg} /> : ""}
       <Paper id="paperCont" className={classes.noColorPaper}>
-        <div>
-          <ArrowBack className="arrowback" onClick={redirectHome} />
+        <ArrowBack className="arrowback" onClick={redirectHome} />
+        <div className="userDetails">
+          <div>
+            <Div> {userInfoData?.username}</Div>
+            <Div> Followers :{userInfoData?.followers?.length}</Div>
+            {!numberOfTweets ? (
+              <Div>No tweets.</Div>
+            ) : (
+              <Div> Tweeted {numberOfTweets} times.</Div>
+            )}
+            <Div>Email:{userInfoData?.email}</Div>
+          </div>
+          <div>
+            <img
+              onClick={redirectProfile}
+              className="image"
+              src={userInfoData?.profile_photo}
+              alt="profile"
+            />
+          </div>
         </div>
-        {userInfoData?.username}
-        <br />
-        Followers : {userInfoData?.followers?.length}
-        <div>
-          {!numberOfTweets ? (
-            <h3>You havnt tweeted yet.</h3>
-          ) : (
-            <h3> Tweeted {numberOfTweets} times.</h3>
-          )}
-        </div>
-        <img
-          onClick={redirectProfile}
-          className="image"
-          src={userInfoData?.profile_photo}
-          alt="profile"
-        />
-        <h3>{userInfoData?.username}</h3>
-        <h3>Email:{userInfoData?.email}</h3>
         <div>
           <DateRange />
           <span>Joined at: {dateOfJoin}</span>
@@ -124,13 +127,21 @@ const Profile = () => {
           </Button>
         </div>
         <div className="postByProfile">
+          {commentsRendered ? (
+            <SnackbarAlert
+              error={error}
+              msg={`Comments for ${userInfoData?.username}`}
+            />
+          ) : (
+            ""
+          )}
           {tweetsRendered ? (
             tweets ? (
               tweets?.map((tweet, index) => (
                 <TweetItemByUser tweet={tweet} key={index} />
               ))
             ) : (
-              <h1>User did not tweet yet.</h1>
+              <Div>User did not tweet yet.</Div>
             )
           ) : (
             ""
@@ -140,10 +151,10 @@ const Profile = () => {
           {commentsRendered ? (
             commentByUser ? (
               commentByUser.map((comment, index) => (
-                <CommentByUser  comment={comment} key={index} />
+                <CommentByUser comment={comment} key={index} />
               ))
             ) : (
-              <h1>{msg}</h1>
+              <Div>{msg}</Div>
             )
           ) : (
             ""

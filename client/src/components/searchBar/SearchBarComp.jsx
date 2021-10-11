@@ -25,15 +25,9 @@ const SearchBarComp = () => {
   const { users } = fetchAllUsersReducer;
 
   const handleChange = (e) => {
-    // setSearch(e.target.value);
     localStorage.setItem("search", e.target.value);
     localStorage.removeItem("userId");
     history.push(`/profile-by-id/${localStorage.getItem("search")}`);
-  };
-  
-  const handleSubmitSearch = () => {
-    history.push(`/profile-by-id/${localStorage.getItem("search")}`);
-    console.log("get");
   };
 
   useEffect(() => {

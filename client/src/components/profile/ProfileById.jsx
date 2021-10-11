@@ -12,6 +12,11 @@ import "./profile.css";
 import SnackbarAlert from "../snackbar/SnackbarAlert";
 import TweetItem from "../tweetItem/TweetItem";
 import { toggleFollow } from "../../Redux/Actions/followActions";
+import { styled } from "@mui/material/styles";
+
+const Div = styled("div")(({ theme }) => ({
+  ...theme.typography.button,
+}));
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -23,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     width: "30%",
   },
+  button: {
+    color: "blue",
+  },
 }));
 
 const ProfileById = () => {
@@ -30,13 +38,15 @@ const ProfileById = () => {
   const [follow, setFollow] = useState(false);
   const [tweetsRendered, setTweetsRendered] = useState(false);
   const localStorageData = JSON.parse(localStorage.getItem("user_info"));
+  const userId = localStorage.getItem("userId");
+  const search = localStorage.getItem("search");
   const dispatch = useDispatch();
   const history = useHistory();
 
   const profileReducer = useSelector((state) => state.profileReducer);
   const { profile } = profileReducer;
-  const { userId } = useParams;
 
+  const followReducer = useSelector((state) => state.followReducer);
   const dateOfJoin = profile?.joinedAt?.split("").slice(0, 10).join("");
 
   const fetchTweetsByIdReducer = useSelector(
@@ -60,7 +70,7 @@ const ProfileById = () => {
   const handleToggleFollow = (_id) => {
     dispatch(
       toggleFollow({
-        _id: localStorage.getItem("userId"),
+        _id: userId ? userId : search,
         followerId: localStorageData.id,
       })
     );
@@ -68,11 +78,9 @@ const ProfileById = () => {
   };
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    const search = localStorage.getItem("search");
-      dispatch(fetchTweetsByUserId(search ? search : userId));
-      dispatch(fetchProfileById(search ? search : userId));
-  }, [dispatch, localStorageData.id, userId, localStorage.getItem("search")]);
+    dispatch(fetchTweetsByUserId(search ? search : userId));
+    dispatch(fetchProfileById(search ? search : userId));
+  }, [dispatch, localStorageData.id, localStorage.getItem("search")]);
 
   return (
     <>
@@ -81,31 +89,36 @@ const ProfileById = () => {
         <div>
           <ArrowBack className="arrowback" onClick={redirectHome} />
         </div>
-        <h3>
-          followers:{" "}
-          {!profile?.followers.length
-            ? "Be the first to follow"
-            : profile?.followers.length}
-        </h3>
-        <div>
-          {localStorageData.id === profile?._id ? (
-            ""
-          ) : (
-            <Button onClick={handleToggleFollow}>
-              {follow ? "unFollow" : "Follow"}
-            </Button>
-          )}
+        <div className="userDetails">
+          <div>
+            <Div> {profile?.username}</Div>
+            <Div>
+              Followers:{" "}
+              {!profile?.followers?.length
+                ? "Be the first to follow"
+                : profile?.followers?.length}
+            </Div>
+            {!numberOfTweets ? (
+              <Div>You havnt tweeted yet.</Div>
+            ) : (
+              <Div> Tweeted {numberOfTweets} times.</Div>
+            )}
+            {follow ? <SnackbarAlert msg={followReducer?.msg} /> : '' }
+
+            {profile?._id === localStorageData.id ? (
+              ""
+            ) : (
+              <Button onClick={handleToggleFollow} className={classes.button}>
+                {profile?.followers?.includes(localStorageData.id)
+                  ? "UnFollow"
+                  : "Follow"}
+              </Button>
+            )}
+          </div>
+          <div>
+            <img className="image" src={profile?.profile_photo} alt="profile" />
+          </div>
         </div>
-        <div>
-          {!numberOfTweets ? (
-            <h3>You havnt tweeted yet.</h3>
-          ) : (
-            <h3> Tweeted {numberOfTweets} times.</h3>
-          )}
-        </div>
-        <img className="image" src={profile?.profile_photo} alt=''/>
-        <h3>{profile?.username}</h3>
-        <h3>Email:{profile?.email}</h3>
         <div>
           <DateRange />
           <span>Joined at: {dateOfJoin}</span>

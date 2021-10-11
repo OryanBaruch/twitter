@@ -60,13 +60,14 @@ const Register = () => {
 
   return (
     <div className="container">
-      <div className="imageDiv">
-        <img
-          className="imageCover"
-          src="https://www.pngitem.com/pimgs/m/240-2408619_twitter-splash-icon-png-image-free-download-searchpng.png"
-          alt="bird"
-        />
-      </div>
+        <div className="imageDiv">
+          <img className='top' src="/photos/pngwing.com.png" alt="logoBird" />
+          <img
+            className="imageCover"
+            src="https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png"
+            alt="bird"
+          />
+        </div>
       <form className="form" onSubmit={(e) => handleSubmit(e)}>
         <TextField
           type="text"
