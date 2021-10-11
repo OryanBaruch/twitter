@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Paper } from "@material-ui/core";
 import { fetchProfileById } from "../../Redux/Actions/profileAction";
 import { useParams, useHistory } from "react-router-dom";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTweetsByUserId } from "../../Redux/Actions/tweetActions";
 import DateRange from "@material-ui/icons/DateRange";
@@ -63,13 +64,15 @@ const ProfileById = () => {
         followerId: localStorageData.id,
       })
     );
+    setFollow(!follow);
   };
 
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    dispatch(fetchTweetsByUserId(userId));
-    dispatch(fetchProfileById(userId));
-  }, [dispatch, localStorageData.id, userId]);
+    const search = localStorage.getItem("search");
+      dispatch(fetchTweetsByUserId(search ? search : userId));
+      dispatch(fetchProfileById(search ? search : userId));
+  }, [dispatch, localStorageData.id, userId, localStorage.getItem("search")]);
 
   return (
     <>
@@ -89,9 +92,7 @@ const ProfileById = () => {
             ""
           ) : (
             <Button onClick={handleToggleFollow}>
-              {profile?.followers?.includes(localStorage.getItem("userId"))
-                ? "unFollow"
-                : "Follow"}
+              {follow ? "unFollow" : "Follow"}
             </Button>
           )}
         </div>
@@ -102,8 +103,8 @@ const ProfileById = () => {
             <h3> Tweeted {numberOfTweets} times.</h3>
           )}
         </div>
-        <img className="image" src={profile?.profile_photo} alt="profile" />
-        <h3>{profile?.username }</h3>
+        <img className="image" src={profile?.profile_photo} alt=''/>
+        <h3>{profile?.username}</h3>
         <h3>Email:{profile?.email}</h3>
         <div>
           <DateRange />

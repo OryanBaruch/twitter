@@ -9,6 +9,8 @@ import {
   FETCH_USER_DATA_REQUEST,
   FETCH_USER_DATA_SUCCESS,
   FETCH_USER_DATA_FAILURE,
+  FETCH_ALL_USERS_SUCCESS,
+  FETCH_ALL_USERS_FAILURE,
 } from "../Actions/actionTypes";
 import jwt_decode from "jwt-decode";
 
@@ -51,7 +53,7 @@ export const loginReducer = (state = {}, action) => {
         loading: false,
         error: payload.error,
         isAllowed: false,
-        msg:payload.msg
+        msg: payload.msg,
       };
     case USER_LOUGOUT_SUCCESS:
       return {};
@@ -73,7 +75,7 @@ export const fetchUserDataReducer = (state = initalStateUserInfo, action) => {
         loading: false,
         msg: payload.msg,
         userInfo: payload,
-        tweets:payload.tweets
+        tweets: payload.tweets,
       };
     case FETCH_USER_DATA_FAILURE:
       return {
@@ -112,12 +114,23 @@ export const registerReducer = (state = initalState, action) => {
   }
 };
 
-// export const registerReducer = (state = {}, action) => {
-//   const { type, payload } = action;
-//   switch (type) {
-//     case REGISTER_SUCCESS:
-//       return { ...state, payload };
-//     default:
-//       return state;
-//   }
-// };
+export const fetchAllUsersReducer = (state = [], action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case FETCH_ALL_USERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        msg: payload.msg,
+        users: payload.userData,
+      };
+    case FETCH_ALL_USERS_FAILURE:
+      return {
+        loading: false,
+        msg: payload.msg,
+        users: [],
+      };
+    default:
+      return state;
+  }
+};

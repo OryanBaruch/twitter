@@ -1,50 +1,69 @@
 import { Button } from "@material-ui/core";
 import SearchBar from "material-ui-search-bar";
 import React, { useEffect, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import TextField from "@mui/material/TextField";
-
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import "./searchBar.css";
 import { fetchProfileById } from "../../Redux/Actions/profileAction";
 import { fetchTweetsByUserId } from "../../Redux/Actions/tweetActions";
-import ProfileById from "../profile/ProfileById";
+import { fetchAllUsers } from "../../Redux/Actions/userActions";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+// import ProfileById from "../profile/ProfileById";
 
 const SearchBarComp = () => {
   let [search, setSearch] = useState("");
-  let [fetchData, setFetchData] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    setSearch(e);
-  };
+  const fetchAllUsersReducer = useSelector(
+    (state) => state.fetchAllUsersReducer
+  );
+  const { users } = fetchAllUsersReducer;
 
-  const searchForUser = () => {
-    setFetchData(true);
-    history.push(`/profile-by-id/${search}`);
+  const handleChange = (e) => {
+    // setSearch(e.target.value);
+    localStorage.setItem("search", e.target.value);
+    localStorage.removeItem("userId");
+    history.push(`/profile-by-id/${localStorage.getItem("search")}`);
+  };
+  
+  const handleSubmitSearch = () => {
+    history.push(`/profile-by-id/${localStorage.getItem("search")}`);
+    console.log("get");
   };
 
   useEffect(() => {
-    if (fetchData) {
-      dispatch(fetchProfileById(search));
-      dispatch(fetchTweetsByUserId(search));
-    }
-  }, [dispatch, search, fetchData]);
+    dispatch(fetchAllUsers());
+  }, [dispatch, search]);
+
   return (
     <>
-      <div className="searchBarContainer">
-        <SearchBar value={search} onChange={(e) => handleChange(e)} />
-        <Button
-          onClick={() => searchForUser(search)}
-          className="submitSearch"
-          variant="contained"
-        >
-          Search
-        </Button>
-      </div>
-      <br />
-      <h3>{search}</h3>
+      <Box sx={{ minWidth: 120 }} className="searchBarContainer">
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Search User</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Search User"
+            onChange={handleChange}
+            value={''}
+          >
+            {users?.map((user, index) => (
+              <MenuItem value={user._id} key={index}>
+                {" "}
+                <div className='dropDownContent'>
+                {user.username}
+                <img className='profile_photo_dropDown' src={user.profile_photo} alt="profile" />
+                </div>
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
     </>
   );
 };

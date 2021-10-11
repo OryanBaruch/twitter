@@ -14,6 +14,7 @@ import {
   removeTweetById,
   toggleLikeTweet,
 } from "../../Redux/Actions/tweetActions";
+import SearchBarComp from "../searchBar/SearchBarComp";
 
 const TweetItem = ({ tweet }) => {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,6 @@ const TweetItem = ({ tweet }) => {
   const history = useHistory();
   const dateFormat = tweet?.publishedAt.slice(0, 10);
   const localStorageData = JSON.parse(localStorage.getItem("user_info"));
-  const userId = localStorage.getItem("userId");
 
   const handleOpen = () => {
     setBoolean(true);
@@ -45,8 +45,8 @@ const TweetItem = ({ tweet }) => {
 
   const redirectProfile = () => {
     localStorage.setItem("userId", tweet?.tweeterId?._id);
-    console.log(tweet?.tweeterId?._id);
-    history.push(`/profile-by-id/${tweet?.tweeterId?._id}`);
+    localStorage.removeItem('search')
+    history.push(`/profile-by-id/${localStorage.getItem('userId')}`);
   };
 
   const handleDelete = () => {
@@ -57,6 +57,7 @@ const TweetItem = ({ tweet }) => {
 
   const handleLikeToggle = () => {
     setOpen(true);
+    console.log(tweet.tweeterId._id)
     dispatch(
       toggleLikeTweet({
         _id: tweet?._id,
@@ -67,13 +68,13 @@ const TweetItem = ({ tweet }) => {
 
   useEffect(() => {
     if (open) {
-      dispatch(fetchTweetsByUserId(localStorageData.id));
+      dispatch(fetchTweetsByUserId(tweet.tweeterId._id));
     } else if (open2) {
       dispatch(fetchTweets());
     }
     setOpen(false);
     setOpen2(false);
-  }, [dispatch, open, open2, localStorageData.id]);
+  }, [dispatch, open, open2, localStorageData.id, tweet.tweeterId._id]);
 
   return (
     <>
@@ -99,16 +100,15 @@ const TweetItem = ({ tweet }) => {
         <Divider />
         <Card className="cardContainer">
           <h3> {tweet.content}</h3>
-          <Divider />
           <img
             onDoubleClick={handleLikeToggle}
             className="img"
             src={tweet.image}
-            alt="tweetImage"
+            alt=""
           />
         </Card>
         {/* <h6>tweetID: {tweet?._id}</h6> */}
-        <h6>userId: {tweet?.tweeterId?._id}</h6>
+        {/* <h6>userId: {tweet?.tweeterId?._id}</h6> */}
         <Divider />
         <div className="userCommands">
           <h3>

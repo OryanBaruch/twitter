@@ -49,8 +49,6 @@ const Profile = () => {
   );
   let { commentByUser, isCommentRendered } = fetchPostByCommentReducer;
 
-  const profileReducer = useSelector(state => state.profileReducer)
-
   const localStorageData = JSON.parse(localStorage.getItem("user_info"));
   const dispatch = useDispatch();
   const history = useHistory();

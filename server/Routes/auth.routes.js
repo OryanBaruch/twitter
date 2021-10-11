@@ -71,7 +71,7 @@ router.post("/login", async (req, res) => {
 router.get("/user-data/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
-    const userData = await user_model.find({ _id:_id }).populate('tweets');
+    const userData = await user_model.find({ _id: _id }).populate("tweets");
     return res.status(201).json({
       err: false,
       msg: "Fetched data for user",
@@ -79,6 +79,23 @@ router.get("/user-data/:_id", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.get("/all-users", async (req, res) => {
+  try {
+    const userData = await user_model.find();
+      return res.status(201).json({
+        err: false,
+        msg: "Fetched data for user",
+        userData
+      });
+  } catch (error) {
+    return res.json({
+      error: true,
+      msg: "Failed to fetch all users",
+      error,
+    });
   }
 });
 

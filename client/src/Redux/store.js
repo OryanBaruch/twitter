@@ -4,6 +4,7 @@ import {
   loginReducer,
   registerReducer,
   fetchUserDataReducer,
+  fetchAllUsersReducer
 } from "./Reducers/userReducer";
 import {
   postTweetReducer,
@@ -33,7 +34,8 @@ const combine_reducers = combineReducers({
   removeTweetReducer,
   likeTweetReducer,
   profileReducer,
-  followReducer
+  followReducer,
+  fetchAllUsersReducer,
 });
 
 const middleware = [thunk];

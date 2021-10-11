@@ -10,6 +10,8 @@ import {
   FETCH_USER_DATA_REQUEST,
   FETCH_USER_DATA_SUCCESS,
   REGISTER_FAILURE,
+  FETCH_ALL_USERS_SUCCESS,
+  FETCH_ALL_USERS_FAILURE,
 } from "./actionTypes";
 import jwt_decode from "jwt-decode";
 
@@ -28,14 +30,14 @@ export const loginAction =
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      console.log(data.msg)
+      console.log(data.msg);
       if (res.status >= 400) {
         dispatch({
           type: LOGIN_FAILURE,
           payload: data,
         });
       } else {
-        console.log(data.error)
+        console.log(data.error);
         localStorage.setItem(
           "user_info",
           JSON.stringify(jwt_decode(data.access_token))
@@ -53,8 +55,6 @@ export const loginAction =
       });
     }
   };
-
-
 
 export const registerAction =
   (username, password, email, birthday, profile_photo) => async (dispatch) => {
@@ -109,10 +109,9 @@ export const fetchLoggedInUserData = (_id) => async (dispatch) => {
     dispatch({
       type: FETCH_USER_DATA_REQUEST,
     });
-    // const userId = JSON.parse(localStorage.getItem("user_info")).id;
     const res = await fetch(ENDPOINT + `/auth/user-data/${_id}`);
     const data = await res.json();
-    console.log(data)
+    console.log(data);
     dispatch({
       type: FETCH_USER_DATA_SUCCESS,
       payload: data.userData[0],
@@ -125,4 +124,19 @@ export const fetchLoggedInUserData = (_id) => async (dispatch) => {
   }
 };
 
-
+export const fetchAllUsers = () => async (dispatch) => {
+  try {
+    const res = await fetch(ENDPOINT + `/auth/all-users`);
+    const data = await res.json();
+    console.log(data);
+    dispatch({
+      type: FETCH_ALL_USERS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FETCH_ALL_USERS_FAILURE,
+      payload: error,
+    });
+  }
+};

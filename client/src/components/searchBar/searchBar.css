@@ -6,3 +6,17 @@ margin: 0  0  0  67.5% ;
 position: absolute;
 top: 1.8em;
 }
+
+.profile_photo_dropDown{
+    display: flex !important;
+    align-self: flex-start !important;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+}
+
+.dropDownContent{
+    display: flex;
+    width: 95%;
+    justify-content: space-between !important;
+}
