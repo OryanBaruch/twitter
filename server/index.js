@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const port = process.env.port || 5000;
+const port = process.env.port || 4500;
 const connect_mongoose = require("./mongoDb/DBcongif");
 const { initUsers } = require("./Models/user.model");
+const path = require('path');
 
 const initDB = async () => {
   await initUsers();
@@ -19,4 +20,10 @@ app.use("/comment", require("./Routes/comments.routes"));
 app.use("/profile", require("./Routes/profile.routes"));
 app.use("/follow", require("./Routes/follow.routes"));
 
-app.listen(port, console.log(`Go on ${port}, Enjoy.`));
+app.use(express.static(path.join(__dirname, "/client/build")));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/client/build', 'index.html'));
+});
+
+app.listen(process.env.port || 4500, console.log(`Go on ${process.env.port || 4500}, Enjoy.`));

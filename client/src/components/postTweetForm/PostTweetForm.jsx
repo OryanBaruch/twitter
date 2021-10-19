@@ -7,6 +7,9 @@ import "./postTweet.css";
 import { Button, Divider, InputBase } from "@material-ui/core";
 import { useHistory } from "react-router";
 import SnackbarAlert from "../snackbar/SnackbarAlert";
+import { fetchLoggedInUserData } from "../../Redux/Actions/userActions";
+import { localStorageData } from "../../Redux/Actions/actionTypes";
+
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -31,15 +34,14 @@ const PostTweet = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const loginReducer = useSelector((state) => state.loginReducer);
-  const { userInfo } = loginReducer;
-
   const postTweetReducer = useSelector(state => state.postTweetReducer)
   const {msg, error}=postTweetReducer;
 
-  const userInfoImage = userInfo?.profile_photo
-    ? userInfo.profile_photo
-    : JSON.parse(localStorage.getItem("user_info")).profile_photo;
+  const fetchUserDataReducer = useSelector(
+    (state) => state.fetchUserDataReducer
+  );
+  const { userInfo } = fetchUserDataReducer;
+  const userInfoData = userInfo && userInfo;
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -58,6 +60,7 @@ const PostTweet = () => {
   
   useEffect(() => {
     dispatch(fetchTweets());
+    dispatch(fetchLoggedInUserData(localStorageData?.id));
   }, [counter, dispatch]);
 
   return (
@@ -103,7 +106,7 @@ const PostTweet = () => {
                 onClick={redirectProfile}
                 id="img"
                 className={classes.img}
-                src={userInfoImage}
+                src={userInfoData?.profile_photo ? userInfoData?.profile_photo :localStorageData?.profile_photo}
                 alt="profilePhoto"
               />
             </div>

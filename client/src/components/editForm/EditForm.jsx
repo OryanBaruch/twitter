@@ -6,6 +6,8 @@ import Fade from "@material-ui/core/Fade";
 import { useDispatch } from "react-redux";
 import { editTweetAction, fetchTweets, fetchTweetsByUserId } from "../../Redux/Actions/tweetActions";
 import { Button, Divider, TextField, Paper } from "@material-ui/core";
+import { localStorageData } from "../../Redux/Actions/actionTypes";
+
 import './editForm.css'
 
 const useStyles = makeStyles((theme) => ({
@@ -38,8 +40,6 @@ const EditForm = ({ tweet, open, handleClose , handleOpenEdit }) => {
     setCounter(prev=>prev+1)
     handleClose()
   };
-  
-  const localStorageData = JSON.parse(localStorage.getItem("user_info"));
 
   useEffect(() => {
     if (counter) { 

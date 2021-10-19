@@ -1,13 +1,15 @@
 import { Card, Divider, Paper } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Chat from "@material-ui/icons/Chat";
 import EditForm from "../editForm/EditForm";
 import CommentForm from "../commentForm/CommentForm";
 import "./tweetItem.css";
 import UserCommands from "../userCommands/UserCommands";
 import { useHistory } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { localStorageData } from "../../Redux/Actions/actionTypes";
 import {
   fetchTweets,
   fetchTweetsByUserId,
@@ -15,6 +17,12 @@ import {
   toggleLikeTweet,
 } from "../../Redux/Actions/tweetActions";
 import { styled } from "@mui/material/styles";
+import BookmarkBorder from "@material-ui/icons/BookmarkBorder";
+import {
+  fetchLoggedInUserData,
+  toggleSavePosts,
+} from "../../Redux/Actions/userActions";
+import SnackbarAlert from "../snackbar/SnackbarAlert";
 
 const Div = styled("div")(({ theme }) => ({
   ...theme.typography.button,
@@ -27,28 +35,18 @@ const TweetItem = ({ tweet }) => {
   const [open2, setOpen2] = useState(false);
   const [boolean, setBoolean] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const history = useHistory();
   const dateFormat = tweet?.publishedAt.slice(0, 10);
-  const localStorageData = JSON.parse(localStorage.getItem("user_info"));
 
-  const handleOpen = () => {
-    setBoolean(true);
+  const toggleOpen = () => {
+    setBoolean(!boolean);
   };
 
-  const handleClose = () => {
-    setBoolean(false);
+  const handleToggleOpenEdit = () => {
+    setOpenEdit(!openEdit);
   };
-
-  const handleOpenEdit = () => {
-    setOpenEdit(true);
-  };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-
   const redirectProfile = () => {
     localStorage.setItem("userId", tweet?.tweeterId?._id);
     localStorage.removeItem("search");
@@ -63,13 +61,19 @@ const TweetItem = ({ tweet }) => {
 
   const handleLikeToggle = () => {
     setOpen(true);
-    console.log(tweet.tweeterId._id);
     dispatch(
       toggleLikeTweet({
         _id: tweet?._id,
         tweeterId: localStorageData.id,
       })
     );
+  };
+
+  const handleSavePostsToggle = () => {
+    dispatch(
+      toggleSavePosts({ _id: localStorageData?.id, postId: tweet?._id })
+    );
+    setOpen2(true);
   };
 
   useEffect(() => {
@@ -80,12 +84,16 @@ const TweetItem = ({ tweet }) => {
     }
     setOpen(false);
     setOpen2(false);
-  }, [dispatch, open, open2, localStorageData.id, tweet.tweeterId._id]);
+  }, [dispatch, open, open2, tweet.tweeterId._id]);
 
   return (
     <>
       <Paper elevation={3}>
         <div className="imageAndUserName">
+          <BookmarkBorder
+            className="bookMarksIcon"
+            onClick={handleSavePostsToggle}
+          />
           <img
             onClick={redirectProfile}
             className={
@@ -93,7 +101,11 @@ const TweetItem = ({ tweet }) => {
                 ? "profile_photo"
                 : "not_user_profile_photo"
             }
-            src={tweet?.tweeterId?.profile_photo}
+            src={
+              tweet?.tweeterId?.profile_photo
+                ? tweet?.tweeterId?.profile_photo
+                : ""
+            }
             alt="profile_photo"
           />
           <Div style={{ borderRight: "0.1em solid gray", padding: "0.2em" }}>
@@ -106,6 +118,7 @@ const TweetItem = ({ tweet }) => {
         <Divider />
         <Card className="cardContainer">
           <Div> {tweet.content}</Div>
+          <h6>{tweet._id}</h6>
           <img
             onDoubleClick={handleLikeToggle}
             className="img"
@@ -113,12 +126,10 @@ const TweetItem = ({ tweet }) => {
             alt=""
           />
         </Card>
-        {/* <h6>tweetID: {tweet?._id}</h6> */}
-        {/* <h6>userId: {tweet?.tweeterId?._id}</h6> */}
         <Divider />
         <div className="userCommands">
           <h3>
-            <FavoriteBorderIcon
+            <FavoriteIcon
               onClick={handleLikeToggle}
               className={
                 tweet?.likes?.includes(localStorageData.id)
@@ -126,25 +137,31 @@ const TweetItem = ({ tweet }) => {
                   : "like"
               }
               fontSize="medium"
+              color="red"
             />{" "}
             {tweet?.likes?.length}
           </h3>
-          <Chat className="comment" onClick={handleOpen} />
+
+          <Chat className="comment" onClick={toggleOpen} />
           {JSON.parse(localStorage.getItem("user_info")).id ===
           tweet?.tweeterId?._id ? (
             <>
               <UserCommands
                 handleDelete={handleDelete}
                 tweet={tweet}
-                handleOpenEdit={handleOpenEdit}
+                handleOpenEdit={handleToggleOpenEdit}
               />
             </>
           ) : (
             ""
           )}
         </div>
-        <CommentForm tweet={tweet} open={boolean} handleClose={handleClose} />
-        <EditForm open={openEdit} tweet={tweet} handleClose={handleCloseEdit} />
+        <CommentForm tweet={tweet} open={boolean} handleClose={toggleOpen} />
+        <EditForm
+          open={openEdit}
+          tweet={tweet}
+          handleClose={handleToggleOpenEdit}
+        />
       </Paper>
     </>
   );

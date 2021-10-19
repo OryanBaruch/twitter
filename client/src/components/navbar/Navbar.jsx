@@ -68,12 +68,6 @@ const Navbar = () => {
         />
         <div className="iconAndLink">
           <Button>
-            <BookmarkBorder className="icon" />
-            Bookmarks
-          </Button>
-        </div>
-        <div className="iconAndLink">
-          <Button>
             <Person className="icon" />
             {JSON.parse(localStorage.getItem("user_info")) ? (
               <a href="/profile">Profile</a>

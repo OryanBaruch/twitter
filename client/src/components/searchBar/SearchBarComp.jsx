@@ -1,21 +1,15 @@
-import { Button } from "@material-ui/core";
-import SearchBar from "material-ui-search-bar";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./searchBar.css";
-import { fetchProfileById } from "../../Redux/Actions/profileAction";
-import { fetchTweetsByUserId } from "../../Redux/Actions/tweetActions";
 import { fetchAllUsers } from "../../Redux/Actions/userActions";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-// import ProfileById from "../profile/ProfileById";
 
 const SearchBarComp = () => {
-  let [search, setSearch] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -32,7 +26,7 @@ const SearchBarComp = () => {
 
   useEffect(() => {
     dispatch(fetchAllUsers());
-  }, [dispatch, search]);
+  }, [dispatch]);
 
   return (
     <>

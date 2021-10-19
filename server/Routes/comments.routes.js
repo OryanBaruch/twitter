@@ -1,14 +1,12 @@
 const router = require("express").Router();
 const comment_model = require("../Models/comment.model");
+const {user_auth, admin_auth}=require('../Auth/jwtAuth')
 
-router.get("/fetch-post-by-user-comments/:tweeterId", async (req, res) => {
+router.get("/fetch-post-by-user-comments/:tweeterId", user_auth, async (req, res) => {
   try {
     const { tweeterId } = req.params;
     const fetchCommentsById = await comment_model
       .find({ tweeterId })
-      .populate({
-        path: "tweeterId",
-      })
       .populate({
         path : 'postId',
         populate : {
@@ -23,7 +21,7 @@ router.get("/fetch-post-by-user-comments/:tweeterId", async (req, res) => {
 
     return res.status(203).json({
       error: false,
-      msg: `Comments for user number ${tweeterId}`,
+      msg: `Fetching comments`,
       fetchCommentsById,
     });
   } catch (error) {
@@ -35,7 +33,7 @@ router.get("/fetch-post-by-user-comments/:tweeterId", async (req, res) => {
   }
 });
 
-router.post("/post-comment/:postId", async (req, res) => {
+router.post("/post-comment/:postId",user_auth ,async (req, res) => {
   try {
     const { postId } = req.params;
     const { tweeterId, comment } = req.body;
@@ -69,5 +67,33 @@ router.post("/post-comment/:postId", async (req, res) => {
     });
   }
 });
+
+router.delete('/remove-comment/:_id',user_auth ,async (req, res)=>{
+  try {
+    const {_id}=req.params;
+    const {tweeterId}=req.body;
+    const removeComment=await comment_model.findOneAndDelete({_id})
+    const fetchCommentsById = await comment_model
+    .find({ tweeterId })
+    .populate({
+      path : 'postId',
+      populate : {
+        path : 'tweeterId'
+      }
+    })
+    return res.status(201).json({
+      error:false,
+      msg:'Removed comment',
+      removeComment,
+      fetchCommentsById
+    })
+  } catch (error) {
+    return res.json({
+      error:true, 
+      msg:'Failed to remove comment',
+      error
+    })
+  }
+})
 
 module.exports = router;

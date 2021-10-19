@@ -2,6 +2,8 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { user_model } = require("../Models/user.model");
+const { user_auth, admin_auth } = require("../Auth/jwtAuth");
+const tweet_model = require("../Models/tweet.model");
 require("dotenv").config();
 
 const invalidMsg = "Invalid Email/Password";
@@ -49,7 +51,7 @@ router.post("/login", async (req, res) => {
         birthday: user.birthday,
         role: user.role,
       },
-      `${process.env.ACCESS_TOKNE_SECRET}`,
+      `${process.env.ACCESS_TOKEN_SECRET}`,
       {
         expiresIn: "100d",
       }
@@ -68,10 +70,14 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/user-data/:_id", async (req, res) => {
+router.get("/user-data/:_id", user_auth, async (req, res) => {
   try {
     const { _id } = req.params;
-    const userData = await user_model.find({ _id: _id }).populate("tweets");
+    const userData = await user_model
+      .find({ _id: _id })
+      .populate("tweets")
+      .populate("savedPosts")
+      .populate("tweeterId");
     return res.status(201).json({
       err: false,
       msg: "Fetched data for user",
@@ -82,7 +88,7 @@ router.get("/user-data/:_id", async (req, res) => {
   }
 });
 
-router.get("/all-users", async (req, res) => {
+router.get("/all-users", user_auth, async (req, res) => {
   try {
     let userDataInfo = await user_model.find();
     let userData = userDataInfo.sort((a, b) =>

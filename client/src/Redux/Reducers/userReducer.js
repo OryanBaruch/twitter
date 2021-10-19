@@ -11,6 +11,9 @@ import {
   FETCH_USER_DATA_FAILURE,
   FETCH_ALL_USERS_SUCCESS,
   FETCH_ALL_USERS_FAILURE,
+  TOGGLE_SAVE_POST_REQUEST,
+  TOGGLE_SAVE_POST_SUCCESS,
+  TOGGLE_SAVE_POST_FAILURE,
 } from "../Actions/actionTypes";
 import jwt_decode from "jwt-decode";
 
@@ -76,6 +79,7 @@ export const fetchUserDataReducer = (state = initalStateUserInfo, action) => {
         msg: payload.msg,
         userInfo: payload,
         tweets: payload.tweets,
+        savedPostsRendered:false
       };
     case FETCH_USER_DATA_FAILURE:
       return {
@@ -134,3 +138,4 @@ export const fetchAllUsersReducer = (state = [], action) => {
       return state;
   }
 };
+

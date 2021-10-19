@@ -5,60 +5,76 @@ import {
   FETCH_COMMENT_BY_USER_REQUEST,
   FETCH_COMMENT_BY_USER_SUCCESS,
   FETCH_COMMENT_BY_USER_FAILURE,
+  REMOVE_COMMENT_REQUEST,
+  REMOVE_COMMENT_SUCCESS,
+  REMOVE_COMMENT_FAILURE,
 } from "../Actions/actionTypes";
 
-export const commentReducer = (state = {}, action) => {
-  const { type, payload } = action;
-  switch (type) {
-    case POST_COMMENT_REQUEST:
-      return {
-        loading: true,
-      };
-    case POST_COMMENT_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        comment: payload,
-      };
-    case POST_COMMENT_FAILURE:
-      return {
-        loading: false,
-        error: payload,
-      };
-    default:
-      return state;
-  }
+const commentsInitalState = {
+  loading: false,
+  error: null,
+  isCommentRendered: false,
+  commentByUser:[],
+  msg: "",
 };
 
-const commentsInitalState={
-  loading:false, 
-  error:null,
-  isCommentRendered:false,
-  tweetsByUser:[],
-  msg:''
-}
-
-export const fetchPostByCommentReducer=(state=commentsInitalState, action)=>{
-  const {type, payload}=action;
+export const fetchPostByCommentReducer = (
+  state = commentsInitalState,
+  action
+) => {
+  const { type, payload } = action;
   switch (type) {
     case FETCH_COMMENT_BY_USER_REQUEST:
       return {
         loading: true,
       };
     case FETCH_COMMENT_BY_USER_SUCCESS:
-      return {...state,
+      return {
+        ...state,
         loading: false,
         commentByUser: payload.fetchCommentsById,
-        isCommentRendered:false,
-        msg:payload.msg,
-        tweeterInfo:payload.fetchLatestTweet
+        isCommentRendered: false,
+        msg: payload.msg,
       };
-     case FETCH_COMMENT_BY_USER_FAILURE:
-         return {
-             loading:false, 
-             error:payload
-         } 
+    case FETCH_COMMENT_BY_USER_FAILURE:
+      return {
+        loading: false,
+        error: payload,
+      };
+      case POST_COMMENT_REQUEST:
+        return {
+          loading: true,
+        };
+      case POST_COMMENT_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          comment: payload.commentByUser,
+        };
+      case POST_COMMENT_FAILURE:
+        return {
+          loading: false,
+          error: payload,
+        };
+    case REMOVE_COMMENT_REQUEST:
+      return {
+        loading: true,
+      };
+    case REMOVE_COMMENT_SUCCESS:
+      // let filteredComments=state.commentByUser.filter((comment)=>comment._id!==payload.removeComment._id)
+      return {
+        ...state,
+        loading: false,
+        msg: payload.msg,
+        commentByUser: payload.fetchCommentsById,
+      };
+    case REMOVE_COMMENT_FAILURE:
+      return{
+        loading:false,
+        msg:payload.msg,
+        error:payload.error
+      }  
     default:
       return state;
   }
-}
+};

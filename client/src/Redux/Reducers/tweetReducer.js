@@ -16,9 +16,9 @@ import {
   FETCH_TWEETS_BY_USERID_FAILURE,
   TOGGLE_LIKE_TWEET_SUCCESS,
   LIKE_TWEET_FAILURE,
-  // FETCH_TWEETS_BY_ID_REQUEST,
-  // FETCH_TWEETS_BY_ID_SUCCESS,
-  // FETCH_TWEETS_BY_ID_FAILURE,
+  TOGGLE_SAVE_POST_REQUEST,
+  TOGGLE_SAVE_POST_SUCCESS,
+  TOGGLE_SAVE_POST_FAILURE,
 } from "../Actions/actionTypes";
 
 const InitalState = {
@@ -71,8 +71,6 @@ export const fetchTweetsReducer = (state = [], action) => {
         loading: false,
         error: null,
         tweets: payload,
-        likes: payload.likes,
-        liked: payload.liked,
         isRendered: false,
       };
 
@@ -169,14 +167,39 @@ export const fetchTweetsByIdReducer = (state = InitalState, action) => {
   }
 };
 
-
 export const likeTweetReducer = (state = {}, action) => {
   const { type, payload } = action;
   switch (type) {
     case TOGGLE_LIKE_TWEET_SUCCESS:
       return {
         ...state,
-        tweetData:payload,
+        tweetData: payload,
+        likes: payload.toggleLikeTweet.likes,
+        msg: payload.msg,
+      };
+    case LIKE_TWEET_FAILURE:
+      return {
+        ...state,
+        likes: [],
+        msg: payload.error,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const saveTweetReducer = (state = {}, action) => {
+  const { type, payload } = action;
+  switch (type) {
+    case TOGGLE_SAVE_POST_REQUEST:
+      return {
+      lodaing:true
+      }
+    case TOGGLE_SAVE_POST_SUCCESS:
+      return {
+        ...state,
+        tweetData: payload,
         likes: payload.toggleLikeTweet.likes,
         msg: payload.msg,
       };

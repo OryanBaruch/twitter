@@ -10,18 +10,20 @@ const userSchema = new Schema(
     liked: { type: Boolean, default: false },
     role: { type: Number, default: 0 },
     joinedAt: { type: Date, default: new Date() },
+    tweeterId: { type: Schema.Types.ObjectId, ref: "tweeter" },
     followers: [
       {
         type: Schema.Types.ObjectId,
         ref: "follow",
       },
     ],
-    tweets: [
+    savedPosts: [
       {
         type: Schema.Types.ObjectId,
         ref: "tweeter",
       },
     ],
+
   },
   { versionKey: false }
 );

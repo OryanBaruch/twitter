@@ -1,8 +1,10 @@
 const router = require("express").Router();
 const follow_model = require("../Models/follow.model");
 const {user_model}=require('../Models/user.model')
+const {user_auth, admin_auth}=require('../Auth/jwtAuth')
 
-router.get('/followed/:_id', async (req,res)=>{
+
+router.get('/followed/:_id', user_auth, async (req,res)=>{
     try {
         const {_id}=req.params;
         const fetchFollowers=await user_model.find({_id})
@@ -22,57 +24,7 @@ router.get('/followed/:_id', async (req,res)=>{
     }
 })
 
-
-router.put("/toggleFollow/:_id/:followerId", async (req, res) => {
-    try {
-      const { _id , followerId} = req.params;
-      // const { followerId } = req.body;
-      const user= await user_model.findOne({ _id });
-      const checkIfYouFollowedUser = user.followers;
-      if (checkIfYouFollowedUser.includes(followerId)) {
-        const toggleFollow = await user_model.findOneAndUpdate(
-          { _id },
-          {
-            $pull: {
-                followers: followerId,
-            },
-          },
-          { new: true, returnNewDocument: true }
-        );
-      
-        return res.status(201).json({
-          err: false,
-          msg: "UnFollowed ",
-          toggleFollow,
-        });
-      } else {
-        const toggleFollow = await user_model.findOneAndUpdate(
-          { _id },
-          {
-            $push: {
-              followers: followerId,
-            },
-          },
-          { new: true, returnNewDocument: true }
-        );
-     
-        return res.status(201).json({
-          err: false,
-          msg: "Followed ",
-          toggleFollow,
-        });
-      }
-    } catch (error) {
-      return res.status(500).json({
-        error: true,
-        msg: "Couldnt activate follow toggle.",
-        error,
-      });
-    }
-  });
-
-
-router.put("/toggleFollow/:_id", async (req, res) => {
+router.put("/toggleFollow/:_id",user_auth, async (req, res) => {
     try {
       const { _id } = req.params;
       const { followerId } = req.body;

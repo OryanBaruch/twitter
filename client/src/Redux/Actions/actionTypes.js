@@ -1,4 +1,6 @@
-export const ENDPOINT = `http://localhost:5000`;
+// export const ENDPOINT = `http://localhost:5000`;
+// export const ENDPOINT = `https://twitter-clone-react-deploy.herokuapp.com/server/`;
+export const ENDPOINT = `https://react-twitter-clone-try.herokuapp.com/`
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -38,6 +40,10 @@ export const POST_COMMENT_REQUEST = "POST_COMMENT_REQUEST";
 export const POST_COMMENT_SUCCESS = "POST_COMMENT_SUCCESS";
 export const POST_COMMENT_FAILURE = "POST_COMMENT_FAILURE";
 
+export const REMOVE_COMMENT_REQUEST = "REMOVE_COMMENT_REQUEST";
+export const REMOVE_COMMENT_SUCCESS = "REMOVE_COMMENT_SUCCESS";
+export const REMOVE_COMMENT_FAILURE = "REMOVE_COMMENT_FAILURE";
+
 export const FETCH_COMMENT_BY_USER_REQUEST = "POST_COMMENT_REQUEST";
 export const FETCH_COMMENT_BY_USER_SUCCESS = "POST_COMMENT_SUCCESS";
 export const FETCH_COMMENT_BY_USER_FAILURE = "FETCH_COMMENT_BY_USER_FAILURE";
@@ -59,3 +65,13 @@ export const FOLLOW_USER_FAILURE = "FETCH_PROFILE_FAILURE";
 
 export const FETCH_ALL_USERS_SUCCESS = "FETCH_ALL_USERS_SUCCESS";
 export const FETCH_ALL_USERS_FAILURE = "FETCH_ALL_USERS_FAILURE";
+
+export const EDIT_PROFILE_REQUESTS = "EDIT_PROFILE_REQUESTS";
+export const EDIT_PROFILE_SUCCESS = "EDIT_PROFILE_SUCCESS";
+export const EDIT_PROFILE_FAILURE = "EDIT_PROFILE_FAILURE";
+
+export const TOGGLE_SAVE_POST_REQUEST = "TOGGLE_SAVE_POST_REQUEST";
+export const TOGGLE_SAVE_POST_SUCCESS = "TOGGLE_SAVE_POST_SUCCESS";
+export const TOGGLE_SAVE_POST_FAILURE = "TOGGLE_SAVE_POST_FAILURE";
+
+export const localStorageData = JSON.parse(localStorage.getItem("user_info"));

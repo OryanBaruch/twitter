@@ -19,6 +19,7 @@ export const toggleFollow =
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: JSON.parse(localStorage.getItem("access_token"))
           },
           body: JSON.stringify({
             followerId,
@@ -33,7 +34,6 @@ export const toggleFollow =
     });
     dispatch(fetchProfileById(localStorage.getItem("userId")))
     } catch (error) {
-      console.log("error like", error);
       dispatch({
         type: FOLLOW_USER_FAILURE,
         payload: error,

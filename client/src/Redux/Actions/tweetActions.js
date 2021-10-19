@@ -32,6 +32,7 @@ export const postTweet = (content, image) => async (dispatch) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: JSON.parse(localStorage.getItem("access_token"))
       },
       body: JSON.stringify({
         content,
@@ -41,7 +42,6 @@ export const postTweet = (content, image) => async (dispatch) => {
     });
     const data = await res.json();
     console.log(data);
-    console.log(data.msg);
     dispatch({
       type: POST_TWEET_SUCCESS,
       payload: data.postNewTweet,
@@ -60,7 +60,10 @@ export const fetchTweets = () => async (dispatch) => {
     dispatch({
       type: FETCH_TWEETS_REQUEST,
     });
-    const res = await fetch(ENDPOINT + "/tweet/tweets");
+    const res = await fetch(ENDPOINT + "/tweet/tweets",
+    {
+      headers: { Authorization: JSON.parse(localStorage.getItem("access_token")) },
+    });
     const data = await res.json();
     dispatch({
       type: FETCH_TWEETS_SUCCESS,
@@ -83,8 +86,10 @@ export const removeTweetById = (_id) => async (dispatch) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        Authorization: JSON.parse(localStorage.getItem("access_token"))
       },
     });
+    
     const data = await res.json();
     dispatch({
       type: REMOVE_TWEET_SUCCESS,
@@ -110,6 +115,7 @@ export const editTweetAction =
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: JSON.parse(localStorage.getItem("access_token"))
         },
         body: JSON.stringify({
           content,
@@ -134,9 +140,11 @@ export const fetchTweetsByUserId = (_id) => async (dispatch) => {
     dispatch({
       type: FETCH_TWEETS_BY_USERID_REQUEST,
     });
-    const res = await fetch(ENDPOINT + `/tweet/tweets-by-user-id/${_id}`);
+    const res = await fetch(ENDPOINT + `/tweet/tweets-by-user-id/${_id}`,
+    {
+      headers: { Authorization: JSON.parse(localStorage.getItem("access_token")) },
+    });
     const data = await res.json();
-    console.log(data);
     dispatch({
       type: FETCH_TWEETS_BY_USERID_SUCCESS,
       payload: data,
@@ -154,7 +162,10 @@ export const fetchTweetsById = (_id) => async (dispatch) => {
     dispatch({
       type: FETCH_TWEETS_BY_ID_REQUEST,
     });
-    const res = await fetch(ENDPOINT + `/tweet/single-tweet/${_id}`);
+    const res = await fetch(ENDPOINT + `/tweet/single-tweet/${_id}`,
+    {
+      headers: { Authorization: JSON.parse(localStorage.getItem("access_token")) },
+    });
     const data = await res.json();
     dispatch({
       type: FETCH_TWEETS_BY_ID_SUCCESS,
@@ -176,13 +187,13 @@ export const toggleLikeTweet =
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: JSON.parse(localStorage.getItem("access_token"))
         },
         body: JSON.stringify({
           tweeterId,
         }),
       });
       const data = await res.json();
-      console.log(data);
       dispatch({
         type: TOGGLE_LIKE_TWEET_SUCCESS,
         payload: data,

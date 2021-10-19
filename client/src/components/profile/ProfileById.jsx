@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Paper } from "@material-ui/core";
 import { fetchProfileById } from "../../Redux/Actions/profileAction";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTweetsByUserId } from "../../Redux/Actions/tweetActions";
@@ -13,6 +12,7 @@ import SnackbarAlert from "../snackbar/SnackbarAlert";
 import TweetItem from "../tweetItem/TweetItem";
 import { toggleFollow } from "../../Redux/Actions/followActions";
 import { styled } from "@mui/material/styles";
+import { localStorageData } from "../../Redux/Actions/actionTypes";
 
 const Div = styled("div")(({ theme }) => ({
   ...theme.typography.button,
@@ -37,7 +37,6 @@ const ProfileById = () => {
   const classes = useStyles();
   const [follow, setFollow] = useState(false);
   const [tweetsRendered, setTweetsRendered] = useState(false);
-  const localStorageData = JSON.parse(localStorage.getItem("user_info"));
   const userId = localStorage.getItem("userId");
   const search = localStorage.getItem("search");
   const dispatch = useDispatch();

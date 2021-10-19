@@ -1,14 +1,12 @@
-import { Card, Divider, Paper } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import { Card, Divider, Paper, Button } from "@material-ui/core";
+import React from "react";
 import { useDispatch } from "react-redux";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import Chat from "@material-ui/icons/Chat";
-import { fetchTweets, removeTweetById } from "../../Redux/Actions/tweetActions";
-import EditForm from "../editForm/EditForm";
-import CommentForm from "../commentForm/CommentForm";
-import UserCommands from "../userCommands/UserCommands";
 import { styled } from "@mui/material/styles";
+import { removeCommentById } from "../../Redux/Actions/commentActions";
+import { localStorageData } from "../../Redux/Actions/actionTypes";
 
+import Delete from "@material-ui/icons/Delete";
+import "./commentByUser.css";
 const Div = styled("div")(({ theme }) => ({
   ...theme.typography.button,
   backgroundColor: theme.palette.background.paper,
@@ -16,37 +14,14 @@ const Div = styled("div")(({ theme }) => ({
 }));
 
 const CommentByUser = ({ comment }) => {
-  const [counter, setCounter] = useState(1);
-  const [open, setOpen] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
   const dispatch = useDispatch();
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleRemoveComment = () => {
+    console.log(comment._id);
+    dispatch(
+      removeCommentById({ _id: comment?._id, tweeterId: localStorageData?.id })
+    );
   };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpenEdit = () => {
-    setOpenEdit(true);
-  };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-
-  const handleDelete = async (_id) => {
-    dispatch(removeTweetById(_id));
-    setCounter((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (!handleDelete) {
-      dispatch(fetchTweets());
-    }
-  }, [counter, dispatch]);
 
   return (
     <>
@@ -66,8 +41,11 @@ const CommentByUser = ({ comment }) => {
             </Div>
           </div>
           <Divider />
-          <Div>{comment?.dateOfComment.slice(0, 10)}</Div>
-          <Div>Comment: {comment?.comment}</Div>
+          <Div>Comment Date: {comment?.dateOfComment.slice(0, 10)}</Div>
+          <div className="contentAndButton">
+            <Div>Content: {comment?.comment}</Div>
+            <Button onClick={handleRemoveComment}><Delete/></Button>
+          </div>
 
           <Card className="cardContainer">
             <Div> {comment?.postId?.content}</Div>

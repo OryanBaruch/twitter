@@ -1,8 +1,9 @@
 import React from "react";
 import TweetItem from "../tweetItem/TweetItem";
+import { localStorageData } from "../../Redux/Actions/actionTypes";
 
-const TweetItemByUser = ({ tweet, index }) => {
-  const localStorageData = JSON.parse(localStorage.getItem("user_info"));
+
+const TweetItemByUser = ({ tweet, index , userInfoData}) => {
   
   return (
     <>

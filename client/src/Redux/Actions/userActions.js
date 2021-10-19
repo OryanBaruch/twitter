@@ -12,6 +12,10 @@ import {
   REGISTER_FAILURE,
   FETCH_ALL_USERS_SUCCESS,
   FETCH_ALL_USERS_FAILURE,
+  TOGGLE_SAVE_POST_REQUEST,
+  TOGGLE_SAVE_POST_SUCCESS,
+  TOGGLE_SAVE_POST_FAILURE,
+  FETCH_USER_DATA_FAILURE,
 } from "./actionTypes";
 import jwt_decode from "jwt-decode";
 
@@ -109,16 +113,19 @@ export const fetchLoggedInUserData = (_id) => async (dispatch) => {
     dispatch({
       type: FETCH_USER_DATA_REQUEST,
     });
-    const res = await fetch(ENDPOINT + `/auth/user-data/${_id}`);
+    const res = await fetch(ENDPOINT + `/auth/user-data/${_id}`, {
+      headers: {
+        Authorization: JSON.parse(localStorage.getItem("access_token")),
+      },
+    });
     const data = await res.json();
-    console.log(data);
     dispatch({
       type: FETCH_USER_DATA_SUCCESS,
       payload: data.userData[0],
     });
   } catch (error) {
     dispatch({
-      type: FETCH_USER_DATA_SUCCESS,
+      type: FETCH_USER_DATA_FAILURE,
       payload: error,
     });
   }
@@ -126,9 +133,12 @@ export const fetchLoggedInUserData = (_id) => async (dispatch) => {
 
 export const fetchAllUsers = () => async (dispatch) => {
   try {
-    const res = await fetch(ENDPOINT + `/auth/all-users`);
+    const res = await fetch(ENDPOINT + `/auth/all-users`, {
+      headers: {
+        Authorization: JSON.parse(localStorage.getItem("access_token")),
+      },
+    });
     const data = await res.json();
-    console.log(data);
     dispatch({
       type: FETCH_ALL_USERS_SUCCESS,
       payload: data,
@@ -136,6 +146,38 @@ export const fetchAllUsers = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: FETCH_ALL_USERS_FAILURE,
+      payload: error,
+    });
+  }
+};
+
+export const toggleSavePosts = ({_id, postId}) => async (dispatch) => {
+  try {
+    dispatch({
+      type: TOGGLE_SAVE_POST_REQUEST,
+    });
+    const res = await fetch(ENDPOINT + `/tweet/toggle-save-posts/${_id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: JSON.parse(localStorage.getItem("access_token"))
+      },
+      body: JSON.stringify({
+        postId,
+      }),
+    });
+    console.log(res)
+    const data = await res.json();
+    console.log(data)
+    dispatch({
+      type: TOGGLE_SAVE_POST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: TOGGLE_SAVE_POST_FAILURE,
       payload: error,
     });
   }
